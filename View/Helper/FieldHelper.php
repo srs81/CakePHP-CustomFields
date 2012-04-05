@@ -15,11 +15,8 @@ class FieldHelper extends AppHelper {
 
 	public function view ($model, $id, $edit=false) {
 		
-		require_once (ROOT . DS . APP_DIR . "/Plugin/CustomFields/Config/bootstrap.php");
 		$dir = "files";
-
-		$lastDir = $this->last_dir ($model, $id);
-		$file = ROOT . DS . APP_DIR . DS . "webroot/$dir/$lastDir.json";
+		$file = ROOT . DS . APP_DIR . "/webroot/$dir/$model/$id.json";
 		if (!file_exists("$file")) 
 			return ""; 
 		$files = file_get_contents ("$file");
@@ -34,15 +31,14 @@ class FieldHelper extends AppHelper {
 
 	public function edit ($model, $id) {
 		require_once (ROOT . DS . APP_DIR . "/Plugin/CustomFields/Config/bootstrap.php");
-		$dir = "files";
 		if (!isset($cfgModelFields[$model])) 
 			return;
 		$tmpFields = explode (",", $cfgModelFields[$model]);
 		foreach ($tmpFields as $field) {
 			$fields[] = trim($field);
 		}
-		$lastDir = $this->last_dir ($model, $id);
-		$file = ROOT . DS . APP_DIR . DS . "webroot/$dir/$lastDir.json";
+		$dir = "files";
+		$file = ROOT . DS . APP_DIR . "/webroot/$dir/$model/$id.json";
 		if (file_exists("$file")) { 
 			$files = file_get_contents ("$file");
 			$values = json_decode ($files);
@@ -60,15 +56,4 @@ class FieldHelper extends AppHelper {
 		return $str;
 	}
 
-	// The "last mile" of the directory path for where the files get uploaded
-	function last_dir ($model, $id) {
-		return $model . "/" . $id;
-	}
-
-	// From http://php.net/manual/en/function.filesize.php
-	function format_bytes($size) {
-		$units = array(' B', ' KB', ' MB', ' GB', ' TB');
-		for ($i = 0; $size >= 1024 && $i < 4; $i++) $size /= 1024;
-		return round($size, 2).$units[$i];
-	}
 }
