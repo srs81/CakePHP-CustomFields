@@ -61,7 +61,7 @@ Let's say you had a "blogs" table with a "id" primary key.
 Add this to your View/Blogs/view.ctp:
 
 ```php
-echo $this->Field->view('Blog', $blog['blog']['id']);
+echo $this->Field->view('Blog', $blog['Blog']['id']);
 ```
 
 and this to your View/Blogs/edit.ctp:
