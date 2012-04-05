@@ -15,7 +15,7 @@ class FieldHelper extends AppHelper {
 
 	public function view ($model, $id, $edit=false) {
 		
-		require_once (ROOT . DS . APP_DIR . "/Plugin/AjaxMultiUpload/Config/bootstrap.php");
+		require_once (ROOT . DS . APP_DIR . "/Plugin/CustomFields/Config/bootstrap.php");
 		$dir = Configure::read('AMU.directory');
 		if (strlen($dir) < 1) $dir = "files";
 
@@ -30,7 +30,7 @@ class FieldHelper extends AppHelper {
 	}
 
 	public function edit ($model, $id) {
-		require_once (ROOT . DS . APP_DIR . "/Plugin/AjaxMultiUpload/Config/bootstrap.php");
+		require_once (ROOT . DS . APP_DIR . "/Plugin/CustomFields/Config/bootstrap.php");
 		$dir = Configure::read('AMU.directory');
 		if (strlen($dir) < 1) $dir = "files";
 
