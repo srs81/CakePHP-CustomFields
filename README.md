@@ -53,6 +53,7 @@ in just your specific controller where you will use it as below:
 
 ```php
 var $helpers = array('CustomFields.Field');
+var $components = array('CustomFields.Field');
 ```
 
 ### Add to views
