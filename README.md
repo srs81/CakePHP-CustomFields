@@ -61,13 +61,13 @@ Let's say you had a "blogs" table with a "id" primary key.
 Add this to your View/Blogs/view.ctp:
 
 ```php
-echo $this->Upload->view('Blog', $blog['blog']['id']);
+echo $this->Field->view('Blog', $blog['blog']['id']);
 ```
 
 and this to your View/Blogs/edit.ctp:
 
 ```php
-echo $this->Upload->edit('Blog', $this->Form->fields['Blog.id']);
+echo $this->Field->edit('Blog', $this->Form->fields['Blog.id']);
 ```
 
 ## FAQ
