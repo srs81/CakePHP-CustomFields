@@ -39,14 +39,16 @@ class FieldHelper extends AppHelper {
 		}
 		$dir = "files";
 		$file = ROOT . DS . APP_DIR . "/webroot/$dir/$model/$id.json";
+		$values = array();
 		if (file_exists("$file")) { 
 			$files = file_get_contents ("$file");
 			$values = json_decode ($files);
 		}
 		$str = "";
-		foreach ($values as $key=>$value) {
-			if (!in_array($key, $fields)) 
-				continue;
+		foreach ($fields as $key) {
+			$value = "";
+			if (array_key_exists($key, $values)) 
+				$value = $values[$key];
 			$humanKey = Inflector::humanize($key);
 			$str .= "<div class='input text'>
 				<label for='$model$key'>$humanKey</label>
