@@ -56,6 +56,11 @@ var $helpers = array('CustomFields.Field');
 var $components = array('CustomFields.Field');
 ```
 
+And to your add() / edit() functions, just below the ->save() function:
+```
+$this->Field->save($this->request->data);
+```
+
 ### Add to views
 
 Let's say you had a "blogs" table with a "id" primary key.
