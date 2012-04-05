@@ -1,5 +1,6 @@
 # CustomFields Plugin for CakePHP
 
+A custom fields plugin for CakePHP 2.x. Now you can add custom fields to your CakePHP app and individual models/controllers without having to worry about database changes.
 
 ## How to Use
 
@@ -84,7 +85,7 @@ structure based on the model name and id to save the appropriate files
 
 ## ChangeLog
 
-## Thanks
+Version 1.0.0: April 2012
 
 ## Support
 
