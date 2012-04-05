@@ -16,34 +16,46 @@ class FieldHelper extends AppHelper {
 	public function view ($model, $id, $edit=false) {
 		
 		require_once (ROOT . DS . APP_DIR . "/Plugin/CustomFields/Config/bootstrap.php");
-		$dir = Configure::read('AMU.directory');
-		if (strlen($dir) < 1) $dir = "files";
+		$dir = "files";
 
 		$lastDir = $this->last_dir ($model, $id);
-		$directory = WWW_ROOT . DS . $dir . DS . $lastDir;
-		$files = file_get_contents ("$directory/$lastDir.json");
+		$file = ROOT . DS . APP_DIR . DS . "webroot/$dir/$lastDir.json";
+		if (!file_exists("$file")) 
+			return ""; 
+		$files = file_get_contents ("$file");
 		$values = json_decode ($files);
+		$str = "";
 		foreach ($values as $key=>$value) {
-			$str = "<dt>$key</dt>\n<dd>$value</dd>\n"; 
+			$key = Inflector::humanize($key);
+			$str .= "<dt>$key</dt>\n<dd>$value</dd>\n"; 
 		}
 		return $str;
 	}
 
 	public function edit ($model, $id) {
 		require_once (ROOT . DS . APP_DIR . "/Plugin/CustomFields/Config/bootstrap.php");
-		$dir = Configure::read('AMU.directory');
-		if (strlen($dir) < 1) $dir = "files";
-
-		$str = $this->view ($model, $id, true);
-		$webroot = Router::url("/") . "ajax_multi_upload";
-		// Replace / with underscores for Ajax controller
-		$lastDir = str_replace ("/", "___", 
-			$this->last_dir ($model, $id));
+		$dir = "files";
+		if (!isset($cfgModelFields[$model])) 
+			return;
+		$tmpFields = explode (",", $cfgModelFields[$model]);
+		foreach ($tmpFields as $field) {
+			$fields[] = trim($field);
+		}
+		$lastDir = $this->last_dir ($model, $id);
+		$file = ROOT . DS . APP_DIR . DS . "webroot/$dir/$lastDir.json";
+		if (file_exists("$file")) { 
+			$files = file_get_contents ("$file");
+			$values = json_decode ($files);
+		}
+		$str = "";
 		foreach ($values as $key=>$value) {
-			$str = "<div class='input text'>
-				<label for='$model$key'></label>
+			if (!in_array($key, $fields)) 
+				continue;
+			$humanKey = Inflector::humanize($key);
+			$str .= "<div class='input text'>
+				<label for='$model$key'>$humanKey</label>
 				<input name='data[$model][$key]' id='$model$key' type='text' value='$value'/>
-				</div>";
+				</div>\n";
 		}
 		return $str;
 	}
