@@ -14,13 +14,14 @@ class FieldHelper extends AppHelper {
 
 
 	public function view ($model, $id, $edit=false) {
-		
-		$dir = "files";
+	        $dir = Configure::read('CF.directory');
+        	if (strlen($dir) < 2)
+	                $dir = "files/custom_fields";
 		$file = ROOT . DS . APP_DIR . "/webroot/$dir/$model/$id.json";
-		if (!file_exists("$file")) 
+		if (!file_exists($file)) 
 			return ""; 
 		$files = file_get_contents ("$file");
-		$values = json_decode ($files);
+		$values = json_decode ($files, true);
 		$str = "";
 		foreach ($values as $key=>$value) {
 			$key = Inflector::humanize($key);
@@ -37,8 +38,14 @@ class FieldHelper extends AppHelper {
 		foreach ($tmpFields as $field) {
 			$fields[] = trim($field);
 		}
-		$dir = "files";
-		$file = ROOT . DS . APP_DIR . "/webroot/$dir/$model/$id.json";
+	        $dir = Configure::read('CF.directory');
+        	if (strlen($dir) < 2)
+	                $dir = "files/custom_fields";
+		$directory = ROOT . DS . APP_DIR . "/webroot/$dir/$model";
+		if (!file_exists($directory)) {
+			mkdir($directory, 0777, true);
+		}
+		$file = "$directory/$id.json";
 		$values = array();
 		if (file_exists("$file")) { 
 			$files = file_get_contents ("$file");

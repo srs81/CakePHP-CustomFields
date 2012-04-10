@@ -1,7 +1,0 @@
-<?php
-
-Configure::write('CustomFields', array(
-	"Blog" => "author, publish_on"
-));
-
-?>
