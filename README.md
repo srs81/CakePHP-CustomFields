@@ -112,6 +112,10 @@ Open up Config/bootstrap.php under the Plugin/CustomFields directory and change 
 
 Version 1.0.0: April 10, 2012
 
+## Future Work
+
+I would like to eventually store the custom data into the database instead of a file, but that would involve more CakePHP complexity, as well as an initiliaztion script from the developer to set up the plugin-specific DB table. But it would help with analytics/reporting and pulling bulk custom data easily (for reporting, etc.)
+ 
 ## Support
 
 If you find this plugin useful, please consider a [donation to Shen
