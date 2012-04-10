@@ -56,9 +56,10 @@ var $helpers = array('CustomFields.Field');
 var $components = array('CustomFields.Field');
 ```
 
-And to your add() / edit() functions, just below the ->save() function:
-```
-$this->Field->save($this->request->data);
+And to your add() / edit() functions, just after the ->save() function:
+
+```php
+$this->Field->save("Blog", $this->request->data);
 ```
 
 ### Add to views
