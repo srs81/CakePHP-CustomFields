@@ -47,9 +47,9 @@ class FieldHelper extends AppHelper {
 		}
 		$file = "$directory/$id.json";
 		$values = array();
-		if (file_exists("$file")) { 
+		if (file_exists($file)) { 
 			$files = file_get_contents ("$file");
-			$values = json_decode ($files);
+			$values = json_decode ($files, true);
 		}
 		$str = "";
 		foreach ($fields as $key) {
