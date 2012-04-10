@@ -30,10 +30,10 @@ class FieldHelper extends AppHelper {
 	}
 
 	public function edit ($model, $id) {
-		require_once (ROOT . DS . APP_DIR . "/Plugin/CustomFields/Config/bootstrap.php");
-		if (!isset($cfgModelFields[$model])) 
+		$customFields = Configure::read("CustomFields");
+		if (!isset($customFields[$model])) 
 			return;
-		$tmpFields = explode (",", $cfgModelFields[$model]);
+		$tmpFields = explode (",", $customFields[$model]);
 		foreach ($tmpFields as $field) {
 			$fields[] = trim($field);
 		}
