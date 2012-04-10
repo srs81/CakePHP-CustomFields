@@ -30,18 +30,29 @@ CakePlugin::load('CustomFields');
 
 This will allow the plugin to load all the files that it needs.
 
+### Add the custom fields for the models
+
+Add the custom fields for the model(s) that you want to add. For instance, say you want to add the fields "author" and "publish_at" to your "Blog" model and a "date_of_birth" to a "User" model, you would add this:
+
+```php
+Configure::write('CustomFields', array(
+	'Blog' => 'author, publish_at',
+	'User' => 'date_of_birth'
+));
+```
+You can add this to either APP/Config/bootstrap.php or APP/Plugin/CustomFields/Config/bootstrap.php .
+
 ### Create file directory
 
 Make sure to create the correct files upload directory if it doesn't
 exist already:
 <pre>
 cd cake-app-root
-mkdir webroot/files
-chmod -R 777 webroot/files
+mkdir webroot/files/custom_fields
+chmod -R 777 webroot/files/custom_fields
 </pre>
 
-The default upload directory is "files" under /webroot - but this can
-be changed (see FAQ below.) 
+The default upload directory is "files/custom_fields" under /webroot - but this can be changed (see FAQ below.) 
 
 You don't have to give it a 777 permission - just make sure the web 
 server user can write to this directory.
@@ -83,16 +94,23 @@ echo $this->Field->edit('Blog', $this->Form->fields['Blog.id']);
 #### Dude! No database/table schema changes?
 
 Nope. :) Just drop this plugin in the right Plugin/ directory and add 
-the code to the controller and views. Make sure the "files" directory
-under webroot is writable, otherwise uploads will fail.
+the code to the controller and views. Make sure the "files/custom_fields" 
+directory under webroot is created and writable, otherwise custom fields 
+won't save.
 
 No tables/database changes are needed since the plugin uses a directory
 structure based on the model name and id to save the appropriate files
  for the model.
 
+#### Change directory
+
+Are you stuck to the "files/custom_fields" directory under webroot? Nope.
+
+Open up Config/bootstrap.php under the Plugin/CustomFields directory and change the "CF.directory" setting.
+
 ## ChangeLog
 
-Version 1.0.0: April 2012
+Version 1.0.0: April 10, 2012
 
 ## Support
 
