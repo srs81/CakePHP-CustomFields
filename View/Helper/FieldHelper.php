@@ -12,56 +12,63 @@
  
 class FieldHelper extends AppHelper {
 
+	public function view ($model, $id) {
+		// Get field names for this model
+		$cfvModel = ClassRegistry::init('CustomFieldValue');
+		$customValues = $cfvModel->find('all', array(
+			'conditions' => array('model_name' => $model, 'model_id' => $id)
+		));
 
-	public function view ($model, $id, $edit=false) {
-	        $dir = Configure::read('CF.directory');
-        	if (strlen($dir) < 2)
-	                $dir = "files/custom_fields";
-		$file = ROOT . DS . APP_DIR . "/webroot/$dir/$model/$id.json";
-		if (!file_exists($file)) 
-			return ""; 
-		$files = file_get_contents ("$file");
-		$values = json_decode ($files, true);
+		// Build a string of key value pairs
 		$str = "";
-		foreach ($values as $key=>$value) {
-			$key = Inflector::humanize($key);
+		foreach ($customValues as $customValue) {
+			$cv = $customValue['CustomFieldValue'];
+			$key = $cv['field_name'];
+			$value = $cv['field_value'];
 			$str .= "<dt>$key</dt>\n<dd>$value</dd>\n"; 
 		}
 		return $str;
 	}
 
 	public function edit ($model, $id) {
-		$customFields = Configure::read("CustomFields");
-		if (!isset($customFields[$model])) 
-			return;
-		$tmpFields = explode (",", $customFields[$model]);
-		foreach ($tmpFields as $field) {
-			$fields[] = trim($field);
-		}
-	        $dir = Configure::read('CF.directory');
-        	if (strlen($dir) < 2)
-	                $dir = "files/custom_fields";
-		$directory = ROOT . DS . APP_DIR . "/webroot/$dir/$model";
-		if (!file_exists($directory)) {
-			mkdir($directory, 0777, true);
-		}
-		$file = "$directory/$id.json";
-		$values = array();
-		if (file_exists($file)) { 
-			$files = file_get_contents ("$file");
-			$values = json_decode ($files, true);
-		}
+		// Models
+		$cfModel = ClassRegistry::init('CustomField');
+		$cfvModel = ClassRegistry::init('CustomFieldValue');
+
+		// Field names
+		$customFields = $cfModel->find('all', array(
+			'conditions' => array('model_name' => $model)
+		));
+
+		// Field values
+		$customValues = $cfvModel->find('all', array(
+			'conditions' => array('model_name' => $model, 'model_id' => $id)
+		));
+
 		$str = "";
-		foreach ($fields as $key) {
-			$value = "";
-			if (array_key_exists($key, $values)) 
-				$value = $values[$key];
-			$humanKey = Inflector::humanize($key);
-			$str .= "<div class='input text'>
-				<label for='$model$key'>$humanKey</label>
-				<input name='data[$model][$key]' id='$model$key' type='text' value='$value'/>
-				</div>\n";
+		if (sizeof($customValues) > 0) {
+			// If there exist values for this model and id
+			foreach ($customValues as $customValue) {
+				$cv = $customValue['CustomFieldValue'];
+				$key = $cv['field_name'];
+				$value = $cv['field_value'];
+				$str .= "<div class='input text'>
+					<label for='$model$key'>$key</label>
+					<input name='data[$model][$key]' id='$model$key' type='text' value='$value'/>
+					</div>\n";
+			}
+		} else {
+			// If there are no existing values
+			foreach ($customFields as $customField) {
+				$cv = $customField['CustomField'];
+				$key = $cv['field_name'];
+				$str .= "<div class='input text'>
+					<label for='$model$key'>$key</label>
+					<input name='data[$model][$key]' id='$model$key' type='text'/>
+					</div>\n";
+			}
 		}
+
 		return $str;
 	}
 
