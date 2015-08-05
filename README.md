@@ -113,8 +113,8 @@ Two database tables actually, "custom_fields" for the list of custom fields corr
 
 ## ChangeLog
 
-Version 1.1.0: August 4, 2015, now loads and saves from database
-Version 1.0.0: April 10, 2012, initial launch
+* Version 1.1.0: August 4, 2015, now loads and saves from database
+* Version 1.0.0: April 10, 2012, initial launch
 
 
 ## Support
