@@ -1,6 +1,6 @@
 # CustomFields Plugin for CakePHP
 
-A custom fields plugin for CakePHP 2.x. Now you can add custom fields to your CakePHP app and individual models/controllers without having to worry about database changes.
+A custom fields plugin for CakePHP 2.x. Now you can add custom fields to your CakePHP app and individual models/controllers.
 
 ## How to Use
 
@@ -17,7 +17,7 @@ git clone https://srs81@github.com/srs81/CakePHP-CustomFields.git
 
 ### Put it in the Plugin/ directory
 
-Unzip or move the contents of this to "Plugin/CustomFields" under
+Unzip or move the contents of the plugin to "Plugin/CustomFields" under
 the app root.
 
 ### Add to bootstrap.php load
@@ -30,32 +30,47 @@ CakePlugin::load('CustomFields');
 
 This will allow the plugin to load all the files that it needs.
 
+### Create two tables in your database
+
+This plugin now uses database tables to read list of custom fields, and to store them. Create these two tables, using 
+the MySQL commands below.
+
+```sql
+--
+-- Table structure for table `custom_fields`
+--
+CREATE TABLE IF NOT EXISTS `custom_fields` (
+`id` int(11) NOT NULL,
+  `model_name` varchar(255) NOT NULL,
+  `field_name` varchar(255) NOT NULL
+);
+ALTER TABLE `custom_fields` ADD PRIMARY KEY (`id`), ADD KEY `model_name` (`model_name`);
+ALTER TABLE `custom_fields` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Table structure for table `custom_field_values`
+--
+CREATE TABLE IF NOT EXISTS `custom_field_values` (
+`id` int(11) NOT NULL,
+  `model_name` varchar(255) NOT NULL,
+  `model_id` int(11) NOT NULL,
+  `field_name` varchar(255) NOT NULL,
+  `field_value` varchar(255) NOT NULL
+);
+ALTER TABLE `custom_field_values` 
+  ADD PRIMARY KEY (`id`), ADD KEY `model_name` (`model_name`), 
+  ADD KEY `model_id` (`model_id`), ADD KEY `field_name` (`field_name`);
+ALTER TABLE `custom_field_values` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+```
+
 ### Add the custom fields for the models
 
-Add the custom fields for the model(s) that you want to add. For instance, say you want to add the fields "author" and "publish_at" to your "Blog" model and a "date_of_birth" to a "User" model, you would add this:
+Add the custom fields for the model(s) that you want to add in the database table. For instance, say you want to add the fields "Author" and "Publish_At" to your "Blog" model, run this SQL on your database table:
 
-```php
-Configure::write('CustomFields', array(
-	'Blog' => 'author, publish_at',
-	'User' => 'date_of_birth'
-));
+```sql
+INSERT INTO `custom_fields` (`id`, `model_name`, `field_name`) VALUES (NULL, 'Blog', 'Author');
+INSERT INTO `custom_fields` (`id`, `model_name`, `field_name`) VALUES (NULL, 'Blog', 'Publish_At');
 ```
-You can add this to either APP/Config/bootstrap.php or APP/Plugin/CustomFields/Config/bootstrap.php .
-
-### Create file directory
-
-Make sure to create the correct files upload directory if it doesn't
-exist already:
-<pre>
-cd cake-app-root
-mkdir webroot/files/custom_fields
-chmod -R 777 webroot/files/custom_fields
-</pre>
-
-The default upload directory is "files/custom_fields" under /webroot - but this can be changed (see FAQ below.) 
-
-You don't have to give it a 777 permission - just make sure the web 
-server user can write to this directory.
 
 ### Add to controller 
 
@@ -67,7 +82,7 @@ var $helpers = array('CustomFields.Field');
 var $components = array('CustomFields.Field');
 ```
 
-And to your add() / edit() functions, just after the ->save() function:
+And to your add() / edit() functions, as the first sentence under the ->save() function:
 
 ```php
 $this->Field->save("Blog", $this->request->data);
@@ -77,13 +92,13 @@ $this->Field->save("Blog", $this->request->data);
 
 Let's say you had a "blogs" table with a "id" primary key.
 
-Add this to your View/Blogs/view.ctp:
+Add this to your View/Blogs/view.ctp, in the dl:
 
 ```php
 echo $this->Field->view('Blog', $blog['Blog']['id']);
 ```
 
-and this to your View/Blogs/edit.ctp:
+and this to your View/Blogs/edit.ctp, within the fieldset tag:
 
 ```php
 echo $this->Field->edit('Blog', $this->Form->fields['Blog.id']);
@@ -91,31 +106,17 @@ echo $this->Field->edit('Blog', $this->Form->fields['Blog.id']);
 
 ## FAQ
 
-#### Dude! No database/table schema changes?
+#### I need a database table?
 
-Nope. :) Just drop this plugin in the right Plugin/ directory and add 
-the code to the controller and views. Make sure the "files/custom_fields" 
-directory under webroot is created and writable, otherwise custom fields 
-won't save.
-
-No tables/database changes are needed since the plugin uses a directory
-structure based on the model name and id to save the appropriate files
- for the model.
-
-#### Change directory
-
-Are you stuck to the "files/custom_fields" directory under webroot? Nope.
-
-Open up Config/bootstrap.php under the Plugin/CustomFields directory and change the "CF.directory" setting.
+Two database tables actually, "custom_fields" for the list of custom fields corresponding to the model, and
+"custom_field_values" for the list of actual values that are saved and loaded.
 
 ## ChangeLog
 
-Version 1.0.0: April 10, 2012
+Version 1.1.0: August 4, 2015, now loads and saves from database
+Version 1.0.0: April 10, 2012, initial launch
 
-## Future Work
 
-I would like to eventually store the custom data into the database instead of a file, but that would involve more CakePHP complexity, as well as an initiliaztion script from the developer to set up the plugin-specific DB table. But it would help with analytics/reporting and pulling bulk custom data easily (for reporting, etc.)
- 
 ## Support
 
 If you find this plugin useful, please consider a [donation to Shen
