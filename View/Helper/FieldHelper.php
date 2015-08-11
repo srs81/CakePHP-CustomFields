@@ -69,6 +69,8 @@ class FieldHelper extends AppHelper {
 			}
 		}
 
+		$str .= "<input name='data[CustomField][ModelId]' id='CustomFieldModelId' type='hidden' value='$id'/>";
+
 		return $str;
 	}
 

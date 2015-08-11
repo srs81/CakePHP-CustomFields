@@ -23,7 +23,7 @@ class FieldComponent extends Component {
 
 		// Model name and ID
 		$modelName = $model;
-		$modelId = $data[$model]['id'];
+		$modelId = $data['CustomField']['ModelId'];
 
 		// For each custom field for this model
 		foreach ($customFields as $customField) {
