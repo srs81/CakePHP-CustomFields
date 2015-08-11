@@ -101,7 +101,7 @@ echo $this->Field->view('Blog', $blog['Blog']['id']);
 and this to your View/Blogs/edit.ctp, within the fieldset tag:
 
 ```php
-echo $this->Field->edit('Blog', $this->Form->fields['Blog.id']);
+echo $this->Field->edit('Blog', $blog['Blog']['id']);
 ```
 
 ## FAQ
