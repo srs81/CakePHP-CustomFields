@@ -1,4 +1,4 @@
-<?php 
+<?php
 /**
  *
  * Dual-licensed under the GNU GPL v3 and the MIT License
@@ -9,7 +9,7 @@
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  *                and/or GNU GPL v3 (http://www.gnu.org/copyleft/gpl.html)
  */
- 
+
 class FieldHelper extends AppHelper {
 
 	public function view ($model, $id) {
@@ -25,7 +25,7 @@ class FieldHelper extends AppHelper {
 			$cv = $customValue['CustomFieldValue'];
 			$key = $cv['field_name'];
 			$value = $cv['field_value'];
-			$str .= "<dt>$key</dt>\n<dd>$value</dd>\n"; 
+			$str .= "<dt>$key</dt>\n<dd>$value</dd>\n";
 		}
 		return $str;
 	}

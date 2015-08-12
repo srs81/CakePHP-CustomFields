@@ -19,7 +19,7 @@ class FieldComponent extends Component {
 		// Custom fields for this model
 		$customFields = $cfModel->find('all', array(
 			'conditions' => array('model_name' => $model)
-			));
+		));
 
 		// Model name and ID
 		$modelName = $model;
@@ -33,27 +33,27 @@ class FieldComponent extends Component {
 			// Get existing values for this model and field
 			$existing = $cfvModel->find('all', array(
 				'conditions' => array('model_name' => $model, 'model_id' => $modelId, 'field_name' => $fieldName)
-				));
+			));
 
 			if (sizeof($existing) > 0) {
 				// If there are existing values for this, update
 				$cfvModel->updateAll(
-					array('field_value' => $fieldValue),
+					array('field_value' => "$fieldValue"),
 					array(
 						'model_name' => $modelName,
 						'model_id' => $modelId,
 						'field_name' => $fieldName
-						)
-					);
+					)
+				);
 			} else {
 				// If not, save a new set of values
 				$cfvModel->create();
-				$cfvModel->save(array('CustomFieldValue' => array( 
-					'field_value' => $fieldValue,
+				$cfvModel->save(array('CustomFieldValue' => array(
+					'field_value' => "$fieldValue",
 					'model_name' => $modelName,
 					'model_id' => $modelId,
 					'field_name' => $fieldName
-					)));
+				)));
 			}
 		}
 	}
