@@ -38,7 +38,7 @@ class FieldComponent extends Component {
 			if (sizeof($existing) > 0) {
 				// If there are existing values for this, update
 				$cfvModel->updateAll(
-					array('field_value' => "$fieldValue"),
+					array('field_value' => "'" . $fieldValue . "'"),
 					array(
 						'model_name' => $modelName,
 						'model_id' => $modelId,
@@ -49,7 +49,7 @@ class FieldComponent extends Component {
 				// If not, save a new set of values
 				$cfvModel->create();
 				$cfvModel->save(array('CustomFieldValue' => array(
-					'field_value' => "$fieldValue",
+					'field_value' => "'" . $fieldValue . "'",
 					'model_name' => $modelName,
 					'model_id' => $modelId,
 					'field_name' => $fieldName
